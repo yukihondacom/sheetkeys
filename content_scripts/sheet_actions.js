@@ -162,7 +162,7 @@ const SheetActions = {
     const isRegexp = caption instanceof RegExp;
     for (const menuItem of Array.from(menuItems)) {
       const label = menuItem.innerText;
-      console.log(label);
+      // console.log(label);
       if (!label) continue;
       if (isRegexp) {
         if (caption.test(label)) {
@@ -170,7 +170,6 @@ const SheetActions = {
         }
       } else {
         if (label.indexOf(caption) === 0) {
-          console.log(label, caption);
           return menuItem;
         }
       }
