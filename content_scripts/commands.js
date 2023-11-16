@@ -393,10 +393,10 @@ const Commands = {
       "moveRight": "l",
 
       // Row & column movement
-      "moveRowsDown": "<C-J>",
-      "moveRowsUp": "<C-K>",
-      "moveColumnsLeft": "<C-H>",
-      "moveColumnsRight": "<C-L>",
+      "moveRowsDown": "<M-J>",
+      "moveRowsUp": "<M-K>",
+      "moveColumnsLeft": "<M-H>",
+      "moveColumnsRight": "<M-L>",
 
       // Editing
       "editCell": "i",
@@ -429,8 +429,8 @@ const Commands = {
       "enterVisualColumnMode": "<A-v>",
 
       // Scrolling
-      "scrollHalfPageDown": "<C-d>",
-      "scrollHalfPageUp": "<C-u>",
+      "scrollHalfPageDown": "<M-d>",
+      "scrollHalfPageUp": "<M-u>",
       "scrollToTop": "g•g",
       "scrollToBottom": "G",
 

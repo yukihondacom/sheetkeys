@@ -2,24 +2,24 @@ const SheetActions = {
   // NOTE(philc): When developing, you can use this snippet to preview all available menu items:
   // Array.from(document.querySelectorAll(".goog-menuitem")).forEach((i) => console.log(i.innerText))
   menuItems: {
-    copy: "Copy",
+    copy: "コピー(C)",
     // This string with a space at the end is meant to match the button "Row X(D)" where X is some
     // number. When multiple rows are selected, the capture is "Rows X(D)".
-    deleteRow: /^Row[s]? \d+\(D\)/,
+    deleteRow: /^行 \d+ を削除/,
     deleteColumn: /^Column[s]? (?!stats)/, // Avoid matching the menu item "Column stats".
     deleteValues: "Values",
-    rowAbove: /^Insert \d+ row above/,
-    rowBelow: /^Insert \d+ row below/,
+    rowAbove: "上に 1 行挿入",
+    rowBelow: "下に 1 行挿入",
     fontSizeMenu: "Font size►",
     freezeRow: /Up to row \d+/, // This is a sub-item of the "Freeze" menu.
     freezeColumn: /Up to column [A-Z]+/, // This is a sub-item of the "Freeze" menu.
-    moveRowUp: /Rows? up/,
-    moveRowDown: /Rows? down/,
-    moveColumnLeft: /Columns? left/,
-    moveColumnRight: /Columns? right/,
-    paste: "Paste",
-    undo: "Undo",
-    redo: "Redo",
+    moveRowUp: "行を上に移動",
+    moveRowDown: "行を下に移動",
+    moveColumnLeft: "列を左に移動",
+    moveColumnRight: "列を右に移動",
+    paste: "貼り付け",
+    undo: "元に戻す",
+    redo: "やり直し",
     fullScreen: "Full screen",
     mergeAll: "Merge all",
     mergeHorizontally: "Merge horizontally",
@@ -61,6 +61,13 @@ const SheetActions = {
   // This is a function that will get assigned to by ui.js. We're not referencing ui.js directly, so
   // that we can avoid a circular dependency.
   typeKeyFn: null,
+
+  japaneseMenuCaptionMap: {
+    "Freeze►": "固定(R)►",
+    "Move►": "移動(M)►",
+    "Delete►": "削除(D)►",
+    "Rows►": "行(R)►",
+  },
 
   setMode(mode) {
     if (this.mode === mode) return;
@@ -127,7 +134,7 @@ const SheetActions = {
       if (els.length > 1) {
         console.log(
           `Warning: there are multiple buttons with the caption ${caption}. ` +
-            "We're expecting only 1.",
+          "We're expecting only 1.",
         );
         console.log(captionList);
       }
@@ -155,6 +162,7 @@ const SheetActions = {
     const isRegexp = caption instanceof RegExp;
     for (const menuItem of Array.from(menuItems)) {
       const label = menuItem.innerText;
+      console.log(label);
       if (!label) continue;
       if (isRegexp) {
         if (caption.test(label)) {
@@ -162,6 +170,7 @@ const SheetActions = {
         }
       } else {
         if (label.indexOf(caption) === 0) {
+          console.log(label, caption);
           return menuItem;
         }
       }
@@ -378,6 +387,8 @@ const SheetActions = {
 
   // Like openRowBelow, but does not enter insert mode.
   insertRowBelow() {
+    console.log("this.menuItems", this.menuItems);
+    console.log("this.menuItems", this.menuItems.rowBelow);
     this.activateMenu("Rows►");
     this.clickMenu(this.menuItems.rowBelow);
   },
@@ -589,6 +600,11 @@ const SheetActions = {
   // Shows and then hides a submenu in the File menu system. This triggers creation of the buttons
   // in that submenu, so they can be clicked.
   activateMenu(menuCaption) {
+    // 日本語用メニューに対応
+    if (this.japaneseMenuCaptionMap[menuCaption]) {
+      menuCaption = this.japaneseMenuCaptionMap[menuCaption];
+    }
+    console.log(menuCaption);
     const menuButton = this.getMenuItem(menuCaption);
     KeyboardUtils.simulateClick(menuButton);
     // Once the submenu is shown, it can only be hidden by modifying its style attribute. It's not
